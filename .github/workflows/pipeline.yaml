@@ -28,7 +28,7 @@ jobs:
         with:
           python-version: "3.9"
       - name: Install Dependencies
-        run: pip install pandas scikit-learn==1.4.2 huggingface_hub
+        run: pip install pandas scikit-learn==1.4.2 huggingface_hub urllib3 requests httpx
       - name: Run Data Preparation
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
@@ -44,7 +44,7 @@ jobs:
         with:
           python-version: "3.9"
       - name: Install Dependencies
-        run: pip install pandas scikit-learn==1.4.2 mlflow joblib huggingface_hub
+        run: pip install pandas scikit-learn==1.4.2 mlflow joblib huggingface_hub urllib3 requests httpx
       - name: Start MLflow Server
         run: |
           nohup mlflow ui --host 0.0.0.0 --port 5000 &  # Run MLflow UI in the background
