@@ -11,6 +11,7 @@ def load_model():
     model_path = hf_hub_download(
         repo_id="nikhileshmehta1989/predictive_maintenance_vehicle",
         filename="best_model.pkl",
+        repo_type="space",
         token=os.getenv("HF_TOKEN"),
     )
     return joblib.load(model_path)
