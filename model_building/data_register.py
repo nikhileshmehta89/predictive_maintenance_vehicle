@@ -1,4 +1,4 @@
-
+import os
 from huggingface_hub import HfApi
 from huggingface_hub.errors import RepositoryNotFoundError
 
@@ -28,7 +28,7 @@ except RepositoryNotFoundError:
 
 # Upload raw/source dataset folder contents
 api.upload_folder(
-    folder_path="predictive_maintenance_vehicle/data",
+    folder_path="data",
     repo_id=repo_id,
     repo_type=repo_type,
 )

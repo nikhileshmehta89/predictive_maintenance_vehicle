@@ -53,7 +53,7 @@ def configure_huggingface_insecure_http() -> None:
         )
 
 repo_id = "nikhileshmehta1989/Predictive_Maintenance_Vehicle"
-LOCAL_DATA_PATH = Path("predictive_maintenance_vehicle/data/engine_data.csv")
+LOCAL_DATA_PATH = Path("data/engine_data.csv")
 HF_DATASET_PATH = f"hf://datasets/{repo_id}/engine_data.csv"
 
 configure_huggingface_insecure_http()
@@ -116,9 +116,9 @@ test_df[target_col] = y_test.values
 
 print(f"Train size: {len(train_df)}, Test size: {len(test_df)}")
 
-os.makedirs("predictive_maintenance_vehicle/data", exist_ok=True)
-train_path = "predictive_maintenance_vehicle/data/train.csv"
-test_path = "predictive_maintenance_vehicle/data/test.csv"
+os.makedirs("data", exist_ok=True)
+train_path = "data/train.csv"
+test_path = "data/test.csv"
 
 train_df.to_csv(train_path, index=False)
 test_df.to_csv(test_path, index=False)

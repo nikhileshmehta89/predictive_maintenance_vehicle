@@ -78,7 +78,7 @@ configure_huggingface_insecure_http()
 
 # Prefer Hugging Face splits, then fall back to local files if the download fails.
 DATASET_REPO_ID = "nikhileshmehta1989/Predictive_Maintenance_Vehicle"
-LOCAL_DATA_DIR = Path("predictive_maintenance_vehicle/data")
+LOCAL_DATA_DIR = Path("data")
 LOCAL_TRAIN_PATH = LOCAL_DATA_DIR / "train.csv"
 LOCAL_TEST_PATH = LOCAL_DATA_DIR / "test.csv"
 TARGET_COL = "engine_condition"
@@ -144,7 +144,7 @@ y_test = test_df[TARGET_COL]
 
 # MLflow experiment setup using local file-based tracking (no server required).
 os.environ.setdefault("MLFLOW_ALLOW_FILE_STORE", "true")
-mlflow_tracking_uri = "file:./predictive_maintenance_vehicle/mlruns"
+mlflow_tracking_uri = "file:./mlruns"
 mlflow.set_tracking_uri(mlflow_tracking_uri)
 mlflow.set_experiment("Predictive_Maintenance_Vehicle")
 print(f"MLflow tracking URI set to: {mlflow_tracking_uri}")
@@ -205,12 +205,12 @@ print(f"Test F1     : {metrics['f1_score']:.4f}")
 print(f"Test ROC-AUC: {metrics['roc_auc']:.4f}")
 
 # Save tuned Decision Tree locally.
-os.makedirs("predictive_maintenance_vehicle/model_building", exist_ok=True)
-model_path = "predictive_maintenance_vehicle/model_building/best_decision_tree_model.pkl"
+os.makedirs("model_building", exist_ok=True)
+model_path = "model_building/best_decision_tree_model.pkl"
 joblib.dump(best_model, model_path)
 print(f"Tuned Decision Tree model saved to {model_path}")
 
-cv_results_path = "predictive_maintenance_vehicle/model_building/grid_search_results.csv"
+cv_results_path = "model_building/grid_search_results.csv"
 pd.DataFrame(grid_search.cv_results_).to_csv(cv_results_path, index=False)
 print(f"Grid search results saved to {cv_results_path}")
 

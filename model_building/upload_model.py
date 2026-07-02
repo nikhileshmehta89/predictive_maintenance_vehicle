@@ -15,7 +15,7 @@ except ImportError:
     from huggingface_hub.utils import RepositoryNotFoundError
 
 
-MODEL_PATH = Path("predictive_maintenance_vehicle/model_building/best_decision_tree_model.pkl")
+MODEL_PATH = Path("model_building/best_decision_tree_model.pkl")
 HF_SPACE_ID = (
     os.getenv("HF_SPACE_ID")
     or os.getenv("HF_UPLOAD_REPO_ID")
