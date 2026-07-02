@@ -3,7 +3,6 @@ import pandas as pd
 import joblib
 import os
 from huggingface_hub import hf_hub_download
-from huggingface_hub.errors import HfHubHTTPError
 
 # ── Load Model from Hugging Face Model Hub ─────────────────────────────────────
 
@@ -25,12 +24,21 @@ def load_model():
                 token=os.getenv("HF_TOKEN"),
             )
             return joblib.load(model_path)
-        except HfHubHTTPError as exc:
-            # Older/newer huggingface_hub versions differ in exception classes.
-            # Treat HTTP 404 as "file missing" and try next candidate filename.
-            if getattr(exc.response, "status_code", None) == 404:
+        except Exception as exc:
+            # huggingface_hub exception class names differ by version.
+            # Identify "not found" in a version-agnostic way and try fallback filename.
+            status_code = getattr(getattr(exc, "response", None), "status_code", None)
+            class_name = exc.__class__.__name__
+            is_not_found = (
+                status_code == 404
+                or class_name in {"EntryNotFoundError", "RepositoryNotFoundError", "RevisionNotFoundError"}
+                or "404" in str(exc)
+            )
+
+            if is_not_found:
                 last_error = exc
                 continue
+
             raise
 
     raise FileNotFoundError(
