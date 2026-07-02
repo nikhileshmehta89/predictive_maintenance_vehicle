@@ -1,0 +1,10 @@
+artifact_location: file:///Users/nikhimeh/Documents/walsh_DBA/Projects/capstone/predictive_maintenance_vehicle/mlruns/520876412116143061/models/m-a197db2cb20846738dbcee9918525c21/artifacts
+creation_timestamp: 1782953337916
+experiment_id: '520876412116143061'
+last_updated_timestamp: 1782953340786
+model_id: m-a197db2cb20846738dbcee9918525c21
+model_type: null
+name: model
+source_run_id: 3c91cbc44fd948f18c7741b7ef998086
+status: 2
+status_message: null
