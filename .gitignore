@@ -3,6 +3,11 @@ __pycache__/
 *.py[cod]
 
 # Generated training outputs
+mlruns/
+data/train.csv
+data/test.csv
+model_building/best_decision_tree_model.pkl
+model_building/grid_search_results.csv
 predictive_maintenance/mlruns/
 predictive_maintenance/data/train.csv
 predictive_maintenance/data/test.csv
