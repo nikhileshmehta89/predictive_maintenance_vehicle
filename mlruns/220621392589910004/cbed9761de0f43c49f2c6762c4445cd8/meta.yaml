@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/nikhimeh/Documents/walsh_DBA/Projects/capstone/predictive_maintenance_vehicle/mlruns/220621392589910004/cbed9761de0f43c49f2c6762c4445cd8/artifacts
+end_time: 1782957273981
+entry_point_name: ''
+experiment_id: '220621392589910004'
+lifecycle_stage: active
+run_id: cbed9761de0f43c49f2c6762c4445cd8
+run_name: DecisionTree
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1782957271593
+status: 3
+tags: []
+user_id: nikhimeh
