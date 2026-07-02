@@ -36,6 +36,11 @@ def load_model():
 
 model = load_model()
 
+# Compatibility guard for models trained with older scikit-learn versions.
+# Some runtimes expect this attribute on tree estimators during predict.
+if not hasattr(model, "monotonic_cst"):
+    model.monotonic_cst = None
+
 # ── Streamlit UI ───────────────────────────────────────────────────────────────
 
 st.title("Predictive Maintenance - Engine Condition Predictor")
