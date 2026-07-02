@@ -3,7 +3,7 @@ import pandas as pd
 import joblib
 import os
 from huggingface_hub import hf_hub_download
-from huggingface_hub.errors import EntryNotFoundError
+from huggingface_hub.errors import HfHubHTTPError
 
 # ── Load Model from Hugging Face Model Hub ─────────────────────────────────────
 
@@ -25,9 +25,13 @@ def load_model():
                 token=os.getenv("HF_TOKEN"),
             )
             return joblib.load(model_path)
-        except EntryNotFoundError as exc:
-            last_error = exc
-            continue
+        except HfHubHTTPError as exc:
+            # Older/newer huggingface_hub versions differ in exception classes.
+            # Treat HTTP 404 as "file missing" and try next candidate filename.
+            if getattr(exc.response, "status_code", None) == 404:
+                last_error = exc
+                continue
+            raise
 
     raise FileNotFoundError(
         f"Could not find model file in Hugging Face Space '{repo_id}'. "
