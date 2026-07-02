@@ -144,7 +144,15 @@ y_test = test_df[TARGET_COL]
 
 # MLflow experiment setup using local file-based tracking (no server required).
 os.environ.setdefault("MLFLOW_ALLOW_FILE_STORE", "true")
-mlflow_tracking_uri = "file:./mlruns"
+if os.getenv("MLFLOW_TRACKING_URI"):
+    mlflow_tracking_uri = os.getenv("MLFLOW_TRACKING_URI")
+else:
+    # In CI, avoid committed local mlruns metadata that may contain absolute
+    # artifact paths from a different machine (for example /Users/...).
+    tracking_dir = Path(".mlruns_ci" if os.getenv("GITHUB_ACTIONS") == "true" else "mlruns").resolve()
+    tracking_dir.mkdir(parents=True, exist_ok=True)
+    mlflow_tracking_uri = tracking_dir.as_uri()
+
 mlflow.set_tracking_uri(mlflow_tracking_uri)
 mlflow.set_experiment("Predictive_Maintenance_Vehicle")
 print(f"MLflow tracking URI set to: {mlflow_tracking_uri}")

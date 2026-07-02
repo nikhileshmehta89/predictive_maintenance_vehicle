@@ -45,13 +45,11 @@ jobs:
           python-version: "3.9"
       - name: Install Dependencies
         run: pip install pandas scikit-learn==1.4.2 mlflow joblib huggingface_hub urllib3 requests httpx
-      - name: Start MLflow Server
-        run: |
-          nohup mlflow ui --host 0.0.0.0 --port 5000 &  # Run MLflow UI in the background
-          sleep 5  # Wait for a moment to let the server starts
       - name: Model Building
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          MLFLOW_ALLOW_FILE_STORE: "true"
+          MLFLOW_TRACKING_URI: file:./.mlruns_ci
         run: python model_building/train.py
 
   deploy-hosting:
