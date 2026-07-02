@@ -1,0 +1,10 @@
+.DS_Store
+__pycache__/
+*.py[cod]
+
+# Generated training outputs
+predictive_maintenance/mlruns/
+predictive_maintenance/data/train.csv
+predictive_maintenance/data/test.csv
+predictive_maintenance/model_building/best_decision_tree_model.pkl
+predictive_maintenance/model_building/grid_search_results.csv
