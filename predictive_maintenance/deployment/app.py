@@ -3,20 +3,42 @@ import pandas as pd
 import joblib
 import os
 from huggingface_hub import hf_hub_download
+from huggingface_hub.errors import EntryNotFoundError
 
 # ── Load Model from Hugging Face Model Hub ─────────────────────────────────────
 
 @st.cache_resource
 def load_model():
-    model_path = hf_hub_download(
-        repo_id="nikhileshmehta1989/predictive_maintenance_vehicle",
-        filename="best_model.pkl",
-        repo_type="space",
-        token=os.getenv("HF_TOKEN"),
-    )
-    return joblib.load(model_path)
+    repo_id = os.getenv("HF_SPACE_ID", "nikhileshmehta1989/predictive_maintenance_vehicle")
+    model_filenames = [
+        os.getenv("HF_MODEL_FILENAME", "best_model.pkl"),
+        "best_decision_tree_model.pkl",
+    ]
+
+    last_error = None
+    for filename in model_filenames:
+        try:
+            model_path = hf_hub_download(
+                repo_id=repo_id,
+                filename=filename,
+                repo_type="space",
+                token=os.getenv("HF_TOKEN"),
+            )
+            return joblib.load(model_path)
+        except EntryNotFoundError as exc:
+            last_error = exc
+            continue
+
+    raise FileNotFoundError(
+        f"Could not find model file in Hugging Face Space '{repo_id}'. "
+        f"Tried: {model_filenames}."
+    ) from last_error
 
 model = load_model()
+
+# Compatibility guard for models trained with older scikit-learn versions.
+if not hasattr(model, "monotonic_cst"):
+    model.monotonic_cst = None
 
 # ── Streamlit UI ───────────────────────────────────────────────────────────────
 
@@ -45,6 +67,7 @@ input_data = pd.DataFrame([{
     "lub oil temp": lub_oil_temp,
     "Coolant temp": coolant_temp,
 }])
+input_data.columns = [c.strip().lower().replace(" ", "_") for c in input_data.columns]
 
 st.subheader("Input Preview")
 st.dataframe(input_data)
@@ -53,6 +76,8 @@ st.dataframe(input_data)
 
 
 if st.button("Predict"):
+    if not hasattr(model, "monotonic_cst"):
+        model.monotonic_cst = None
     prediction = model.predict(input_data)[0]
 
     if hasattr(model, "predict_proba"):
